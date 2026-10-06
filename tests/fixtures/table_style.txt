@@ -1,0 +1,8 @@
+Financial projections (BWP)
+Item | Year 1 | Year 2 | Year 3
+Total revenue | 1 800 000 | 2 250 000 | 2 700 000
+Total expenses | 1 350 000 | 1 600 000 | 1 900 000
+Net profit | 450 000 | 650 000 | 800 000
+Loan requested | 500 000
+Owner's contribution | 125 000
+Gross margin of 25% is expected.
