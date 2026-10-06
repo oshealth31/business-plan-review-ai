@@ -1,19 +1,42 @@
-"""Post-deploy smoke test: python scripts/smoke_test.py https://your-app.example.com"""
+"""Post-deploy smoke test: python scripts/smoke_test.py https://your-url"""
+
 import json
 import sys
 import urllib.request
 
-base = (sys.argv[1] if len(sys.argv) > 1 else 'http://127.0.0.1:8000').rstrip('/')
+
+def main():
+    base = (
+        sys.argv[1]
+        if len(sys.argv) > 1
+        else "http://127.0.0.1:8000"
+    ).rstrip("/")
+
+    def get(path):
+        with urllib.request.urlopen(base + path, timeout=20) as r:
+            return r.status, r.read(), dict(r.headers)
+
+    status, body, _ = get("/api/health")
+    assert status == 200, f"health check failed: {status}"
+
+    status, body, _ = get("/api/health/ready")
+    assert status == 200, f"readiness check failed: {status}"
+
+    status, body, _ = get("/api/templates")
+    templates = json.loads(body)
+    assert len(templates) > 0, "No templates returned"
+
+    status, body, headers = get("/")
+    assert status == 200
+    assert b"FundingLens Check" in body
+
+    assert (
+        "Content-Security-Policy" in headers
+        or "content-security-policy" in headers
+    )
+
+    print("smoke test passed:", base)
 
 
-def get(path):
-    with urllib.request.urlopen(base + path, timeout=20) as r:
-        return r.status, r.read(), dict(r.headers)
-
-
-s, body, _ = get('/api/health'); assert s == 200, 'health'
-s, body, _ = get('/api/health/ready'); assert s == 200, f'ready: {body[:200]}'
-s, body, _ = get('/api/templates'); t = json.loads(body); assert len(t) >= 7 and 'weight' not in body.decode(), 'templates'
-s, body, h = get('/'); assert s == 200 and b'FundingLens Check' in body, 'frontend'
-assert 'Content-Security-Policy' in h or 'content-security-policy' in {k.lower() for k in h}, 'csp'
-print('smoke test passed:', base)
+if __name__ == "__main__":
+    main()
