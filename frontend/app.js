@@ -29,7 +29,7 @@ async function api(path, opts = {}) {
   const headers = Object.assign({}, opts.headers || {});
   if (state.token) headers.Authorization = 'Bearer ' + state.token;
   let body = opts.body;
-  if (body && !(body instanceof FormData) && typeof body !== 'string') { body = JSON.stringify(body); headers['Content-Type'] = 'application/json'; }
+  if (body && !(body instanceof FormData) && !(body instanceof URLSearchParams) && typeof body !== 'string') { body = JSON.stringify(body); headers['Content-Type'] = 'application/json'; }
   const res = await fetch('/api' + path, { method: opts.method || 'GET', headers, body });
   if (res.status === 401 && state.token && !opts.noAuthRedirect) { signOut(); throw new Error('Your session has ended. Please sign in again.'); }
   if (opts.raw) return res;
@@ -133,8 +133,7 @@ function viewSignin(mode = 'in') {
   form.addEventListener('submit', (ev) => { ev.preventDefault(); guarded(btn, host, async () => {
     let r;
     if (mode === 'in') {
-      r = await api('/token', { method: 'POST', body: new URLSearchParams({ username: email.value, password: pw.value }), headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, noAuthRedirect: true });
-    } else r = await api('/auth/signup', { method: 'POST', body: { email: email.value, password: pw.value, invite_code: code.value || null, accept_terms: terms.checked } });
+r = await api('/token', { method: 'POST', body: new URLSearchParams({ username: email.value, password: pw.value }).toString(), headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, noAuthRedirect: true });    } else r = await api('/auth/signup', { method: 'POST', body: { email: email.value, password: pw.value, invite_code: code.value || null, accept_terms: terms.checked } });
     setToken(r.access_token); await loadMe(); renderChrome(); location.hash = '#/checks'; if (mode === 'up') toast('Account created.');
   }); });
   host.append(h('h2', {}, mode === 'in' ? 'Welcome back' : 'Create your account'), tabs, form);
