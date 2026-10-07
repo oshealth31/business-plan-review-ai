@@ -114,7 +114,16 @@ function templateCard(t, selectable, selected) {
     h('details', {}, h('summary', {}, `${t.criteria.length} items we look for`), h('ul', { class: 'tight' }, t.criteria.map((c) => h('li', {}, c.label, c.required ? ' (required)' : '')))),
     t.basis === 'published' ? h('p', { class: 'small' }, t.source_note) : null);
 }
-
+const noticeBox = h('details', { class: 'notice-box' },
+  h('summary', {}, 'Read the terms and privacy notice'),
+  h('p', {}, 'FundingLens Check is a demo readiness tool. It is not a funder, does not give financial or legal advice, and does not predict any funder\'s decision.'),
+  h('p', {}, 'What we collect: your email address, a protected (hashed) version of your password, the business plan files you upload, and the reports generated from them.'),
+  h('p', {}, 'Why: to run the checklist, show you your results, and manage credits.'),
+  h('p', {}, 'How long we keep it: uploaded plans are deleted after 30 days, or sooner if you delete them. This demo may also reset without notice, which removes all accounts and data.'),
+  h('p', {}, 'Who sees it: The person running the demo can technically access them, and will only look at them to fix a problem or answer your question. We do not sell your data. AI notes are switched off in this demo.'),
+  h('p', {}, 'Your choices: you can ask for your account and files to be deleted at any time by contacting fundinglens@gmail.com.'),
+  h('p', {}, 'Please do not upload ID numbers, bank details, or anything you would not want a tester to see.')
+);
 function viewSignin(mode = 'in') {
   const m = $('#main'); const host = h('div', { class: 'sheet auth' });
   const tabs = h('div', { class: 'tabs', role: 'tablist' },
@@ -127,7 +136,7 @@ function viewSignin(mode = 'in') {
   const form = h('form', { novalidate: true }, h('label', { for: 'em' }, 'Email'), email, h('label', { for: 'pw' }, 'Password'), pw,
     mode === 'up' ? [h('p', { class: 'help' }, 'At least 12 characters.'),
       state.cfg && state.cfg.require_invite ? [h('label', { for: 'inv' }, 'Invite code'), code, h('p', { class: 'help' }, 'Check is invite-only while we test it. Your invite may include starting credits.')] : null,
-      h('div', { class: 'check-row' }, terms, h('label', { for: 'tm' }, 'I accept the terms and privacy notice (version ' + (state.cfg ? state.cfg.terms_version : '') + ').'))] : null);
+     mode === 'up' ? noticeBox : null, h('div', { class: 'check-row' }, terms, h('label', { for: 'tm' }, 'I have read and accept the terms and privacy notice. (version ' + (state.cfg ? state.cfg.terms_version : '') + ').'))] : null);
   const btn = h('button', { class: 'btn', type: 'submit' }, mode === 'in' ? 'Sign in' : 'Create account');
   form.append(h('p', {}, btn));
   form.addEventListener('submit', (ev) => { ev.preventDefault(); guarded(btn, host, async () => {

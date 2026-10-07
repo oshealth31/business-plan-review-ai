@@ -12,3 +12,5 @@ services:
       - {key: PAYMENT_WEBHOOK_SECRET, generateValue: true}
       - {key: DATABASE_URL, sync: false}
       - {key: REQUIRE_INVITE, value: "true"}
+      - {key: TERMS_VERSION, value: "v1-2026-10"}
+      - {key: SUPPORT_EMAIL, sync: false}

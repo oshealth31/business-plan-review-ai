@@ -105,3 +105,6 @@ ul.tight{margin:0 0 1em;padding-left:1.2em} ul.tight li{margin:4px 0}
 @media(prefers-reduced-motion:no-preference){.proof{animation:settle .5s ease-out both}@keyframes settle{from{transform:translateY(8px);opacity:0}}}
 
 main:focus{outline:none}
+.notice-box { margin: 12px 0; padding: 10px 12px; border: 1px solid #d0d7de; border-radius: 8px; background: #f6f8fa; font-size: 0.9rem; }
+.notice-box summary { cursor: pointer; font-weight: 600; }
+.notice-box p { margin: 8px 0 0; }
