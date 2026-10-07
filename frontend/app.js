@@ -57,6 +57,7 @@ function renderChrome() {
   const foot = $('#foot'); foot.replaceChildren(h('div', {}, `FundingLens Check v${state.cfg ? state.cfg.version : ''} - an independent readiness tool. Not a funder, not advice, and never a prediction of any funder's decision.`),
     state.cfg && state.cfg.support_email ? h('div', {}, 'Help: ', h('a', { href: 'mailto:' + state.cfg.support_email }, state.cfg.support_email)) : null);
   document.querySelectorAll('.nav a').forEach((a) => { if (a.getAttribute('href') === location.hash) a.setAttribute('aria-current', 'page'); });
+   $('#foot').append(' ', h('a', { href: 'https://forms.gle/6qaZ6kgo8JC9EECYA', target: '_blank', rel: 'noopener noreferrer' }, 'Send feedback'));
 }
 function setChip(n) { if (state.me) state.me.credits = n; const c = $('#chip'); if (c) c.textContent = `${n} credits`; }
 
